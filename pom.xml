@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.example</groupId>
+	<artifactId>cucumber-junit4-bookstore-api-testing</artifactId>
+	<version>1.0-SNAPSHOT</version>
+	<properties>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<cucumber.version>7.23.0</cucumber.version>
+		<restassured.version>5.3.0</restassured.version>
+		<jackson.version>2.15.2</jackson.version>
+		<junit.version>4.13.2</junit.version>
+		<maven-cucumber-reporting.version>5.6.1</maven-cucumber-reporting.version>
+		<!-- set as 'none' so that features/scenarios to run sequentially -->
+		<surefireParallel>methods</surefireParallel>
+		<!-- control how many feature files will run in parallel -->
+		<surefireThreadCount>4</surefireThreadCount>
+	</properties>
+
+	<dependencies>
+		<!-- Cucumber JVM for JUnit runner and PicoContainer for lightweight DI -->
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-java</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-junit</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.cucumber</groupId>
+			<artifactId>cucumber-picocontainer</artifactId>
+			<version>${cucumber.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.rest-assured</groupId>
+			<artifactId>rest-assured</artifactId>
+			<version>${restassured.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>logback-classic</artifactId>
+			<version>1.4.11</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Jackson for JSON processing -->
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>${jackson.version}</version>
+		</dependency>
+
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.10.1</version>
+				<configuration>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+				</configuration>
+			</plugin>
+
+			<!-- Surefire will run the JUnit-based Cucumber runner.-->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>3.0.0-M8</version>
+				<configuration>
+					<testFailureIgnore>true</testFailureIgnore>
+				    <parallel>${surefireParallel}</parallel>
+				    <!-- number of worker threads-->
+				    <threadCount>${surefireThreadCount}</threadCount>
+					<!-- If true, it multiplies threadCount by the number of CPU cores.
+					E.g. if you have a 4-core machine and set threadCount=2, 
+					you actually get 2 × 4 = 8 threads -->
+					<perCoreThreadCount>false</perCoreThreadCount>				    
+					<!-- keep one forked JVM with 1 (faster). If you need strong
+					isolation - each feature in its own JVM, set forkCount and
+					reuseForks to false -->
+					<!--forkCount>1</forkCount-->
+					<!--reuseForks>true</reuseForks-->
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>net.masterthought</groupId>
+				<artifactId>maven-cucumber-reporting</artifactId>
+				<version>${maven-cucumber-reporting.version}</version>
+				<executions>
+					<execution>
+						<id>execution</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>generate</goal>
+						</goals>
+						<configuration>
+							<projectName>BookStore API Automated Tests</projectName>
+							<outputDirectory>${project.build.directory}</outputDirectory>
+							<jsonFiles>
+								<param>**/*.json</param>
+							</jsonFiles>
+							<checkBuildResult>false</checkBuildResult>							
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

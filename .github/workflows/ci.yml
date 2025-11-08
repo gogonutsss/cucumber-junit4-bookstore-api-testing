@@ -111,5 +111,5 @@ jobs:
     - name: Display Published Page URL
       if: github.ref == 'refs/heads/main' && github.event_name == 'push' && steps.upload-pages.outcome == 'success'
       run: |
-        echo "📄 Enjoy this pretty Cucumber HTML Report: https://gogonutsss.github.io/1st/overview-features.html"
+        echo "📄 Enjoy this pretty Cucumber HTML Report: https://gogonutsss.github.io/cucumber-junit4-bookstore-api-testing/overview-features.html"
 

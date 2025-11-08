@@ -1,0 +1,115 @@
+name: CI tests execution
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:  # Allows manual trigger from GitHub UI
+
+permissions:
+  contents: read
+  actions: read
+  checks: write
+  pull-requests: write
+  pages: write
+  id-token: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: 'maven'
+    
+    - name: Install dependencies
+      run: mvn clean install -DskipTests
+    
+    - name: Run API tests and generate reports
+      run: mvn clean verify
+      continue-on-error: true
+
+    - name: Upload Native Cucumber HTML Report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: native-cucumber-html-report
+        path: target/cucumber-reports/
+        if-no-files-found: warn
+      continue-on-error: true
+   
+    - name: Upload Native Cucumber Timeline HTML Report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: native-cucumber-timeline-html-report
+        path: target/timeline/
+        if-no-files-found: warn
+      continue-on-error: true
+
+    - name: Upload Masterthought Cucumber HTML Report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: masterthought-cucumber-report
+        path: target/cucumber-html-reports/
+        if-no-files-found: warn
+      continue-on-error: true
+
+    - name: Upload Surefire Test Report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: surefire-report
+        path: target/surefire-reports/
+        if-no-files-found: warn
+      continue-on-error: true
+      
+    - name: Publish Native Cucumber JSON Report
+      if: always()
+      uses: deblockt/cucumber-report-annotations-action@v1.7
+      with:
+        name: native-cucumber-json-report
+        access-token: ${{ secrets.GITHUB_TOKEN }}
+        path: "target/cucumber-reports/cucumber.json"
+      continue-on-error: true
+ 
+    - name: Publish Surefire Test Report
+      if: always()
+      uses: dorny/test-reporter@v1
+      with:
+        name: surefire-report
+        path: target/surefire-reports/*.xml
+        reporter: java-junit
+      continue-on-error: true
+
+    - name: Setup Pages
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      id: setup-pages
+      uses: actions/configure-pages@v4
+      continue-on-error: true  
+  
+    - name: Upload Masterthought Cucumber HTML Report to Pages
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push' && steps.setup-pages.outcome == 'success'
+      id: upload-pages
+      uses: actions/upload-pages-artifact@v4
+      with:
+        path: target/cucumber-html-reports/
+    
+    - name: Deploy Masterthought Cucumber HTML Report to Pages
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push' && steps.upload-pages.outcome == 'success'
+      uses: actions/deploy-pages@v4
+      
+    - name: Display Published Page URL
+      if: github.ref == 'refs/heads/main' && github.event_name == 'push' && steps.upload-pages.outcome == 'success'
+      run: |
+        echo "📄 Enjoy this pretty Cucumber HTML Report: https://gogonutsss.github.io/1st/overview-features.html"
+

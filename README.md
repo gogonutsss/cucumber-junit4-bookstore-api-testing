@@ -17,8 +17,8 @@
 git clone https://github.com/gogonutsss/cucumber-junit4-bookstore-api-testing
 cd cucumber-junit4-bookstore-api-testing
 
-# Install dependencies
-mvn clean install
+# Install dependencies (skip tests for faster setup)
+mvn clean install -DskipTests
 
 # Verify setup (run smoke tests)
 mvn test -Dcucumber.filter.tags="@smoke"

@@ -1,7 +1,6 @@
 # 🚀 Bookstore API Test Automation Framework
 
-> **An API testing framework for the [FakeRestAPI](https://fakerestapi.azurewebsites.net/) Bookstore using Cucumber BDD, RestAssured, Junit4 and Java 17**
-
+**An API testing framework for the [FakeRestAPI](https://fakerestapi.azurewebsites.net/) Bookstore using Cucumber BDD, RestAssured, Junit4 and Java 17. Currently focused only in Authors and Books services**
 ---
 
 ## 🚀 Quick Start Guide

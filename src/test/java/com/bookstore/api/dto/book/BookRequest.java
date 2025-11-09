@@ -8,7 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class BookRequest {
 
     @JsonProperty("id")
-    private int id;
+    private String id;
 
     @JsonProperty("title")
     private String title;
@@ -40,11 +40,11 @@ public class BookRequest {
     }
 
     // Getters and setters
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -95,14 +95,14 @@ public class BookRequest {
 
     // Builder class
     public static class Builder {
-        private int id;
+        private String id;
         private String title;
         private String description;
         private int pageCount;
         private String excerpt;
         private String publishDate;
 
-        public Builder id(int id) {
+        public Builder id(String id) {
             this.id = id;
             return this;
         }

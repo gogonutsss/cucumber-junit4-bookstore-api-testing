@@ -53,7 +53,7 @@ public class BooksStepDefinitions {
 
 		Map<String, String> bookData = dataTable.asMap(String.class, String.class);
 
-		BookRequest bookRequest = BookRequest.builder().id(Integer.valueOf(bookData.get("id")))
+		BookRequest bookRequest = BookRequest.builder().id(bookData.get("id"))
 				.title(bookData.get("title")).description(bookData.get("description"))
 				.pageCount(Integer.parseInt(bookData.get("pageCount"))).excerpt(bookData.get("excerpt"))
 				.publishDate(LocalDateTime.now().toString()).build();
@@ -69,7 +69,7 @@ public class BooksStepDefinitions {
 		assertNotNull("Book request should be set", bookRequest);
 
 		Response response = bookService.createBook(bookRequest);
-		int bookId = bookRequest.getId();
+		String bookId = bookRequest.getId();
 		testContext.setLastBooksResponse(response);
 		testContext.getAddedBooks().add(bookId);
 		logger.info("Requested to add a new book with id {}", bookId);
@@ -80,7 +80,7 @@ public class BooksStepDefinitions {
 		logger.info("Creating a book for test setup");
 		// given this service, setting id while creating is a bit odd, anyways, I set
 		// just a hardcoded value for the timebeing
-		int bookId = 1;
+		String bookId = "1";
 		BookRequest bookRequest = BookRequest.builder().id(bookId).title("Test Book for Cucumber")
 				.description("A book created for testing purposes").pageCount(200)
 				.excerpt("This is a test book excerpt").publishDate(LocalDateTime.now().toString()).build();
@@ -112,7 +112,7 @@ public class BooksStepDefinitions {
 	public void iHaveBookDetailsWithTitleAndPageCount(String title, int pageCount) {
 		logger.info("Setting up book details with title: {} and page count: {}", title, pageCount);
 
-		BookRequest bookRequest = BookRequest.builder().id(1).title(title).description("Description for " + title)
+		BookRequest bookRequest = BookRequest.builder().id("1").title(title).description("Description for " + title)
 				.pageCount(pageCount).excerpt("Excerpt for " + title).publishDate(LocalDateTime.now().toString())
 				.build();
 
@@ -144,7 +144,7 @@ public class BooksStepDefinitions {
 		// atm, any 0<=id<=books.size works...
 		Random random = new Random();
 		int randomBook = random.nextInt(books.size() + 1);
-		int bookId = books.get(randomBook).getId();
+		String bookId = books.get(randomBook).getId();
 
 		Response response = bookService.getBookById(bookId);
 		testContext.setLastBooksResponse(response);
@@ -156,7 +156,7 @@ public class BooksStepDefinitions {
 		logger.info("Requesting to updating a book");
 
 		BookRequest updateRequest = testContext.getCurrentBookRequest();
-		int bookId = updateRequest.getId();
+		String bookId = updateRequest.getId();
 
 		Response response = bookService.updateBook(bookId, updateRequest);
 		testContext.setLastBooksResponse(response);
@@ -166,34 +166,35 @@ public class BooksStepDefinitions {
 	public void iRequestToDeleteTheBook() {
 		logger.info("Requesting to delete a book");
 
-		int bookId = testContext.getCurrentBookRequest().getId();
+		String bookId = testContext.getCurrentBookRequest().getId();
 		Response response = bookService.deleteBook(bookId);
 		testContext.setLastBooksResponse(response);
 		logger.info("Deleted book with ID: {}", bookId);
 	}
 
-	@When("I request to {word} a book by non-existent ID {int}")
-	public void iRequestABookWithNonExistentID(String method, int bookId) {
+	@When("I request to {word} a book by non-existent ID {string}")
+	public void iRequestABookWithNonExistentID(String method, String bookId) {
 		logger.info("Requesting to {} book with non-existent ID: {}", method, bookId);
 		Response response = null;
 		try {
 			switch (method) {
-			case "get": {
-				response = bookService.getBookById(bookId);
-				break;
-			}
-			case "update": {
-				BookRequest updateRequest = BookRequest.builder().id(bookId).title("title").description("description")
-						.pageCount(100).excerpt("excerpt").publishDate(LocalDateTime.now().toString()).build();
-				response = bookService.updateBook(bookId, updateRequest);
-				break;
-			}
-			case "delete": {
-				response = bookService.deleteBook(bookId);
-				break;
-			}
-			default:
-				throw new IllegalArgumentException("Unexpected value: " + method);
+				case "get": {
+					response = bookService.getBookById(bookId);
+					break;
+				}
+				case "update": {
+					BookRequest updateRequest = BookRequest.builder().id(bookId).title("title")
+							.description("description")
+							.pageCount(100).excerpt("excerpt").publishDate(LocalDateTime.now().toString()).build();
+					response = bookService.updateBook(bookId, updateRequest);
+					break;
+				}
+				case "delete": {
+					response = bookService.deleteBook(bookId);
+					break;
+				}
+				default:
+					throw new IllegalArgumentException("Unexpected value: " + method);
 			}
 		} catch (Exception e) {
 			logger.info("Expected exception for non-existent book: {}", e.getMessage());

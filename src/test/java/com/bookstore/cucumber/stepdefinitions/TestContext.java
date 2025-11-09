@@ -30,9 +30,9 @@ public class TestContext {
 	private Response lastAuthorsResponse;
 	private Response lastResponse;
 	// Test data
-	private Map<Integer, List<Integer>> invalidBookToAuthors = new HashMap<>();
-	private Set<Integer> addedBooks = new HashSet<>();
-	private Set<Integer> addedAuthors = new HashSet<>();
+	private Map<String, List<String>> invalidBookToAuthors = new HashMap<>();
+	private Set<String> addedBooks = new HashSet<>();
+	private Set<String> addedAuthors = new HashSet<>();
 
 	public TestContext() {
 		logger.debug("TestContext initialized");
@@ -61,7 +61,8 @@ public class TestContext {
 	public Response getLastResponse() {
 		return lastResponse;
 	}
-	//Helpers
+
+	// Helpers
 	public List<BookResponse> getBookList() {
 		return Arrays.asList(this.lastBooksResponse.as(BookResponse[].class));
 	}
@@ -69,20 +70,20 @@ public class TestContext {
 	public List<AuthorResponse> getAuthorList() {
 		return Arrays.asList(this.lastAuthorsResponse.as(AuthorResponse[].class));
 	}
-	
-	public Map<Integer, List<Integer>> getInvalidBookToAuthors() {
+
+	public Map<String, List<String>> getInvalidBookToAuthors() {
 		return invalidBookToAuthors;
 	}
 
-	public void setInvalidBookToAuthors(Map<Integer, List<Integer>> invalidBookToAuthors) {
+	public void setInvalidBookToAuthors(Map<String, List<String>> invalidBookToAuthors) {
 		this.invalidBookToAuthors = invalidBookToAuthors;
 	}
 
-	public Set<Integer> getAddedBooks() {
+	public Set<String> getAddedBooks() {
 		return addedBooks;
 	}
 
-	public Set<Integer> getAddedAuthors() {
+	public Set<String> getAddedAuthors() {
 		return addedAuthors;
 	}
 

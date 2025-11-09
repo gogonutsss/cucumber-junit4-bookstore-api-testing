@@ -8,10 +8,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class AuthorResponse {
 
     @JsonProperty("id")
-    private int id;
+    private String id;
 
     @JsonProperty("idBook")
-    private int idBook;
+    private String idBook;
 
     @JsonProperty("firstName")
     private String firstName;
@@ -24,7 +24,7 @@ public class AuthorResponse {
     }
 
     // Constructor with all fields
-    public AuthorResponse(int id, int idBook, String firstName, String lastName) {
+    public AuthorResponse(String id, String idBook, String firstName, String lastName) {
         this.id = id;
         this.idBook = idBook;
         this.firstName = firstName;
@@ -32,11 +32,11 @@ public class AuthorResponse {
     }
 
     // Getters only (as requested)
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public int getIdBook() {
+    public String getIdBook() {
         return idBook;
     }
 

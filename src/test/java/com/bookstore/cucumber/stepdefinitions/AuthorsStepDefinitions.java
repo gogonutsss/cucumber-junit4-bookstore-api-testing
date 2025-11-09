@@ -54,9 +54,9 @@ public class AuthorsStepDefinitions {
 
 		Map<String, String> authorData = dataTable.asMap(String.class, String.class);
 
-		AuthorRequest authorRequest = AuthorRequest.builder().id(Integer.valueOf(authorData.get("id")))
+		AuthorRequest authorRequest = AuthorRequest.builder().id(authorData.get("id"))
 				.firstName(authorData.get("firstName")).lastName(authorData.get("lastName"))
-				.idBook(Integer.parseInt(authorData.get("idBook"))).build();
+				.idBook(authorData.get("idBook")).build();
 
 		testContext.setCurrentAuthorRequest(authorRequest);
 		logger.info("Author details prepared: {} {}", authorRequest.getFirstName(), authorRequest.getLastName());
@@ -69,7 +69,7 @@ public class AuthorsStepDefinitions {
 		assertNotNull("Author request should be set", authorRequest);
 
 		Response response = authorService.createAuthor(authorRequest);
-		int authorId = authorRequest.getId();
+		String authorId = authorRequest.getId();
 		testContext.setLastAuthorsResponse(response);
 		testContext.getAddedAuthors().add(authorId);
 		logger.info("Requested to add a new author with id {}", authorId);
@@ -80,9 +80,9 @@ public class AuthorsStepDefinitions {
 		logger.info("Creating an author for test setup");
 		// given this service, setting id while creating is a bit odd, anyways, I set
 		// just a hardcoded value for the timebeing
-		int authorId = 1;
+		String authorId = "1";
 		AuthorRequest authorRequest = AuthorRequest.builder().id(authorId).firstName("Test").lastName("Author")
-				.idBook(1).build();
+				.idBook("1").build();
 		testContext.setCurrentAuthorRequest(authorRequest);
 		Response response = authorService.createAuthor(authorRequest);
 		authorService.validateSuccessResponse(response);
@@ -102,7 +102,7 @@ public class AuthorsStepDefinitions {
 
 		AuthorRequest updateRequest = AuthorRequest.builder().id(lastCreationRequest.getId())
 				.firstName(authorData.get("firstName")).lastName(authorData.get("lastName"))
-				.idBook(Integer.parseInt(authorData.get("idBook"))).build();
+				.idBook(authorData.get("idBook")).build();
 
 		testContext.setCurrentAuthorRequest(updateRequest);
 		logger.info("Updated author details prepared: {} {}", updateRequest.getFirstName(),
@@ -113,8 +113,8 @@ public class AuthorsStepDefinitions {
 	public void iHaveAuthorDetailsWithFirstNameAndLastName(String firstName, String lastName) {
 		logger.info("Setting up author details with first name: {} and last name: {}", firstName, lastName);
 
-		AuthorRequest authorRequest = AuthorRequest.builder().id(1).firstName(firstName)
-				.lastName(lastName).idBook(1) // Default
+		AuthorRequest authorRequest = AuthorRequest.builder().id("1").firstName(firstName)
+				.lastName(lastName).idBook("1") // Default
 				.build();
 
 		testContext.setCurrentAuthorRequest(authorRequest);
@@ -146,7 +146,7 @@ public class AuthorsStepDefinitions {
 		// atm, any 0<=id<=authors.size works...
 		Random random = new Random();
 		int randomAuthor = random.nextInt(authors.size() + 1);
-		int authorId = authors.get(randomAuthor).getId();
+		String authorId = authors.get(randomAuthor).getId();
 
 		Response response = authorService.getAuthorById(authorId);
 		testContext.setLastAuthorsResponse(response);
@@ -158,7 +158,7 @@ public class AuthorsStepDefinitions {
 		logger.info("Requesting to update an author");
 
 		AuthorRequest updateRequest = testContext.getCurrentAuthorRequest();
-		int authorId = updateRequest.getId();
+		String authorId = updateRequest.getId();
 
 		Response response = authorService.updateAuthor(authorId, updateRequest);
 		testContext.setLastAuthorsResponse(response);
@@ -168,34 +168,34 @@ public class AuthorsStepDefinitions {
 	public void iRequestToDeleteTheAuthor() {
 		logger.info("Requesting to delete an author");
 
-		int authorId = testContext.getCurrentAuthorRequest().getId();
+		String authorId = testContext.getCurrentAuthorRequest().getId();
 		Response response = authorService.deleteAuthor(authorId);
 		testContext.setLastAuthorsResponse(response);
 		logger.info("Deleted author with ID: {}", authorId);
 	}
 
-	@When("I request to {word} an author by non-existent ID {int}")
-	public void iRequestAnAuthorWithNonExistentID(String method, int authorId) {
+	@When("I request to {word} an author by non-existent ID {string}")
+	public void iRequestAnAuthorWithNonExistentID(String method, String authorId) {
 		logger.info("Requesting to {} author with non-existent ID: {}", method, authorId);
 		Response response = null;
 		try {
 			switch (method) {
-			case "get": {
-				response = authorService.getAuthorById(authorId);
-				break;
-			}
-			case "update": {
-				AuthorRequest updateRequest = AuthorRequest.builder().id(authorId).firstName("firstName")
-						.lastName("lastName").idBook(1).build();
-				response = authorService.updateAuthor(authorId, updateRequest);
-				break;
-			}
-			case "delete": {
-				response = authorService.deleteAuthor(authorId);
-				break;
-			}
-			default:
-				throw new IllegalArgumentException("Unexpected value: " + method);
+				case "get": {
+					response = authorService.getAuthorById(authorId);
+					break;
+				}
+				case "update": {
+					AuthorRequest updateRequest = AuthorRequest.builder().id(authorId).firstName("firstName")
+							.lastName("lastName").idBook("1").build();
+					response = authorService.updateAuthor(authorId, updateRequest);
+					break;
+				}
+				case "delete": {
+					response = authorService.deleteAuthor(authorId);
+					break;
+				}
+				default:
+					throw new IllegalArgumentException("Unexpected value: " + method);
 			}
 		} catch (Exception e) {
 			logger.info("Expected exception for non-existent author: {}", e.getMessage());

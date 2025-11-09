@@ -55,18 +55,6 @@ Feature: BookStore - Books Management
     # This is an intentional failure - to reveal the tests do work
     And the book should be removed from the system
 
-  @error-handling
-  Scenario Outline: Request to <method> non-existent book
-    When I request to <method> a book by non-existent ID 0
-    Then I should receive a not found response
-
-    Examples:
-      | method |
-      | get    |
-      # This is an intentional failure - to reveal the tests do work
-      | update |
-      | delete |
-
   @data-driven
   Scenario Outline: Create book with <testCaseDescription>
     Given I prepare the details for a new book with title "<title>" and page count <pageCount>

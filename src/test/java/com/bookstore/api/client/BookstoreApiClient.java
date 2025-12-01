@@ -60,10 +60,10 @@ public abstract class BookstoreApiClient {
      * Perform GET request with path parameter
      * 
      * @param endpoint The endpoint URL
-     * @param id       The path parameter (usually ID)
+     * @param id       The path parameter (usually ID) as String
      * @return Response object
      */
-    public Response doGet(String endpoint, int id) {
+    public Response doGet(String endpoint, String id) {
         String fullEndpoint = endpoint + "/" + id;
         logger.info("Performing GET request to: {}", fullEndpoint);
 
@@ -96,11 +96,11 @@ public abstract class BookstoreApiClient {
      * Perform PUT request
      * 
      * @param endpoint    The endpoint URL
-     * @param id          The path parameter (usually ID)
+     * @param id          The path parameter (usually ID) as String
      * @param requestBody The request body object
      * @return Response object
      */
-    public Response doPut(String endpoint, int id, Object requestBody) {
+    public Response doPut(String endpoint, String id, Object requestBody) {
         String fullEndpoint = endpoint + "/" + id;
         logger.info("Performing PUT request to: {}", fullEndpoint);
 
@@ -116,10 +116,10 @@ public abstract class BookstoreApiClient {
      * Perform DELETE request
      * 
      * @param endpoint The endpoint URL
-     * @param id       The path parameter (usually ID)
+     * @param id       The path parameter (usually ID) as String
      * @return Response object
      */
-    public Response doDelete(String endpoint, int id) {
+    public Response doDelete(String endpoint, String id) {
         String fullEndpoint = endpoint + "/" + id;
         logger.info("Performing DELETE request to: {}", fullEndpoint);
 
@@ -139,13 +139,13 @@ public abstract class BookstoreApiClient {
      */
     private void logResponse(Response response, String method, String endpoint) {
         if (response.getStatusCode() >= 400) {
-            logger.info("❌ {} {} → {} ({} ms) - {}", 
+            logger.info("❌ {} {} → {} ({} ms) - {}",
                     method, endpoint, response.getStatusCode(), response.getTime(),
                     response.getStatusLine());
             logger.debug("Error details: {}", response.getBody().asString());
 
         } else {
-            logger.info("✅ {} {} → {} ({} ms)", 
+            logger.info("✅ {} {} → {} ({} ms)",
                     method, endpoint, response.getStatusCode(), response.getTime());
             logger.debug("Response body: {}", response.getBody().asString());
         }

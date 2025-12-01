@@ -30,7 +30,7 @@ public class BookService extends BookstoreApiClient {
 	 * @param bookId The book ID
 	 * @return Response object
 	 */
-	public Response getBookById(int bookId) {
+	public Response getBookById(String bookId) {
 		logger.info("Fetching book with ID {}", bookId);
 		return doGet(ApiConfig.getBooksEndpoint(), bookId);
 	}
@@ -54,7 +54,7 @@ public class BookService extends BookstoreApiClient {
 	 * @param bookRequest The updated book request object
 	 * @return Response object
 	 */
-	public Response updateBook(int bookId, BookRequest bookRequest) {
+	public Response updateBook(String bookId, BookRequest bookRequest) {
 		logger.info("Updating book with ID {}", bookId);
 		return doPut(ApiConfig.getBooksEndpoint(), bookId, bookRequest);
 	}
@@ -65,7 +65,7 @@ public class BookService extends BookstoreApiClient {
 	 * @param bookId The book ID to delete
 	 * @return Response object
 	 */
-	public Response deleteBook(int bookId) {
+	public Response deleteBook(String bookId) {
 		logger.info("Deleting book with ID {}", bookId);
 		return doDelete(ApiConfig.getBooksEndpoint(), bookId);
 	}
@@ -76,7 +76,7 @@ public class BookService extends BookstoreApiClient {
 	 * @param bookId The book ID to check
 	 * @return true if book exists, false otherwise
 	 */
-	public boolean bookExists(int bookId) {
+	public boolean bookExists(String bookId) {
 		try {
 			Response response = doGet(ApiConfig.getBooksEndpoint(), bookId);
 			return response.getStatusCode() == 200;

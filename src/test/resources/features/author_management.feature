@@ -54,7 +54,7 @@ Feature: BookStore - Authors Management
 
   @error-handling
   Scenario Outline: Request to <method> non-existent author
-    When I request to <method> an author by non-existent ID 0
+    When I request to <method> an author by non-existent ID "0"
     Then I should receive a not found response
 
     Examples:

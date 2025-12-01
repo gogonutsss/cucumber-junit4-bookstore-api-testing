@@ -46,7 +46,8 @@ public class BooksStepDefinitionsThen {
 		assertNotNull("Books list should not be null", books);
 
 		for (BookResponse book : books) {
-			assertTrue("Book ID should not be null", book.getId() >= 1);
+			assertNotNull("Book ID should not be null", book.getId());
+			assertFalse("Book ID should not be empty", book.getId().trim().isEmpty());
 			assertNotNull("Book title should not be null", book.getTitle());
 			assertNotNull("Book description should not be null", book.getDescription());
 			assertTrue("Book page count should be positive", book.getPageCount() > 0);
@@ -63,7 +64,8 @@ public class BooksStepDefinitionsThen {
 
 		BookResponse book = testContext.getCurrentBookResponse();
 		assertNotNull("Book should not be null", book);
-		assertTrue("Book ID should not be null", book.getId() >= 1);
+		assertNotNull("Book ID should not be null", book.getId());
+		assertFalse("Book ID should not be empty", book.getId().trim().isEmpty());
 		assertNotNull("Book title should not be null", book.getTitle());
 		assertNotNull("Book description should not be null", book.getDescription());
 		assertTrue("Book page count should be positive", book.getPageCount() > 0);
@@ -84,7 +86,8 @@ public class BooksStepDefinitionsThen {
 		String expectedPublishDate = publishDate.substring(0, publishDate.length() - 6);
 
 		assertNotNull("Book should not be null", book);
-		assertTrue("Book ID should be assigned", book.getId() >= 1);
+		assertNotNull("Book ID should be assigned", book.getId());
+		assertFalse("Book ID should not be empty", book.getId().trim().isEmpty());
 		assertEquals("Book title should match", originalRequest.getTitle(), book.getTitle());
 		assertEquals("Book description should match", originalRequest.getDescription(), book.getDescription());
 		assertEquals("Book page count should match", originalRequest.getPageCount(), book.getPageCount());
@@ -97,7 +100,7 @@ public class BooksStepDefinitionsThen {
 	public void theBookShouldBeStoredInTheSystem() {
 		logger.info("Validating book is stored in the system");
 
-		int bookId = testContext.getCurrentBookRequest().getId();
+		String bookId = testContext.getCurrentBookRequest().getId();
 		boolean exists = bookService.bookExists(bookId);
 
 		// TODO many more assertions but it does not make sense given this mock...
@@ -112,7 +115,7 @@ public class BooksStepDefinitionsThen {
 		logger.info("Validating book is updated in the system");
 
 		BookRequest updateRequest = testContext.getCurrentBookRequest();
-		int bookId = updateRequest.getId();
+		String bookId = updateRequest.getId();
 
 		Response response = bookService.getBookById(bookId);
 		testContext.setLastBooksResponse(response);
@@ -126,7 +129,7 @@ public class BooksStepDefinitionsThen {
 	public void theBookShouldBeRemovedFromTheSystem() {
 		logger.info("Validating book is removed from the system");
 
-		int bookId = testContext.getCurrentBookRequest().getId();
+		String bookId = testContext.getCurrentBookRequest().getId();
 		boolean exists = bookService.bookExists(bookId);
 		assertFalse("Book with ID " + bookId + " should not exist in the system after deletion", exists);
 

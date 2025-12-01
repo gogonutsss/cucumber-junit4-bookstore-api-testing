@@ -45,10 +45,12 @@ public class AuthorsStepDefinitionsThen {
 		assertNotNull("Authors list should not be null", authors);
 
 		for (AuthorResponse author : authors) {
-			assertTrue("Author ID should not be null", author.getId() >= 1);
+			assertNotNull("Author ID should not be null", author.getId());
+			assertFalse("Author ID should not be empty", author.getId().trim().isEmpty());
 			assertNotNull("Author first name should not be null", author.getFirstName());
 			assertNotNull("Author last name should not be null", author.getLastName());
-			assertTrue("Author book ID should not be null", author.getIdBook() >= 1);
+			assertNotNull("Author book ID should not be null", author.getIdBook());
+			assertFalse("Author book ID should not be empty", author.getIdBook().trim().isEmpty());
 		}
 
 		logger.info("All {} authors have valid properties", authors.size());
@@ -62,7 +64,8 @@ public class AuthorsStepDefinitionsThen {
 		AuthorRequest originalRequest = testContext.getCurrentAuthorRequest();
 
 		assertNotNull("Author should not be null", author);
-		assertTrue("Author ID should be assigned", author.getId() >= 1);
+		assertNotNull("Author ID should be assigned", author.getId());
+		assertFalse("Author ID should not be empty", author.getId().trim().isEmpty());
 		assertEquals("Author first name should match", originalRequest.getFirstName(), author.getFirstName());
 		assertEquals("Author last name should match", originalRequest.getLastName(), author.getLastName());
 		assertEquals("Author book ID should match", originalRequest.getIdBook(), author.getIdBook());
@@ -76,10 +79,12 @@ public class AuthorsStepDefinitionsThen {
 
 		AuthorResponse author = testContext.getCurrentAuthorResponse();
 		assertNotNull("Author should not be null", author);
-		assertTrue("Author ID should not be null", author.getId() >= 1);
+		assertNotNull("Author ID should not be null", author.getId());
+		assertFalse("Author ID should not be empty", author.getId().trim().isEmpty());
 		assertNotNull("Author first name should not be null", author.getFirstName());
 		assertNotNull("Author last name should not be null", author.getLastName());
-		assertTrue("Author book ID should not be null", author.getIdBook() >= 1);
+		assertNotNull("Author book ID should not be null", author.getIdBook());
+		assertFalse("Author book ID should not be empty", author.getIdBook().trim().isEmpty());
 
 		logger.info("Author has all required properties: for id {}", author.getId());
 	}
@@ -88,7 +93,7 @@ public class AuthorsStepDefinitionsThen {
 	public void theAuthorShouldBeStoredInTheSystem() {
 		logger.info("Validating author is stored in the system");
 
-		int authorId = testContext.getCurrentAuthorRequest().getId();
+		String authorId = testContext.getCurrentAuthorRequest().getId();
 		boolean exists = authorService.authorExists(authorId);
 		assertTrue("Author should exist in the system", exists);
 		// TODO more assertions but it does not make sense given this mock...
@@ -100,7 +105,7 @@ public class AuthorsStepDefinitionsThen {
 		logger.info("Validating author is updated in the system");
 
 		AuthorRequest updateRequest = testContext.getCurrentAuthorRequest();
-		int authorId = updateRequest.getId();
+		String authorId = updateRequest.getId();
 
 		Response response = authorService.getAuthorById(authorId);
 		testContext.setLastAuthorsResponse(response);
@@ -116,7 +121,7 @@ public class AuthorsStepDefinitionsThen {
 	public void theAuthorShouldBeRemovedFromTheSystem() {
 		logger.info("Validating author is removed from the system");
 
-		int authorId = testContext.getCurrentAuthorRequest().getId();
+		String authorId = testContext.getCurrentAuthorRequest().getId();
 		boolean exists = authorService.authorExists(authorId);
 		assertFalse("Author with ID " + authorId + " should not exist in the system after deletion", exists);
 

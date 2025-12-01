@@ -30,7 +30,7 @@ public class AuthorService extends BookstoreApiClient {
 	 * @param authorId The author ID
 	 * @return Response object
 	 */
-	public Response getAuthorById(int authorId) {
+	public Response getAuthorById(String authorId) {
 		logger.info("Fetching author with ID {}", authorId);
 		return doGet(ApiConfig.getAuthorsEndpoint(), authorId);
 	}
@@ -54,7 +54,7 @@ public class AuthorService extends BookstoreApiClient {
 	 * @param authorRequest The updated author request object
 	 * @return Response object
 	 */
-	public Response updateAuthor(int authorId, AuthorRequest authorRequest) {
+	public Response updateAuthor(String authorId, AuthorRequest authorRequest) {
 		logger.info("Updating author with ID {}", authorId);
 		return doPut(ApiConfig.getAuthorsEndpoint(), authorId, authorRequest);
 	}
@@ -65,7 +65,7 @@ public class AuthorService extends BookstoreApiClient {
 	 * @param authorId The author ID to delete
 	 * @return Response object
 	 */
-	public Response deleteAuthor(int authorId) {
+	public Response deleteAuthor(String authorId) {
 		logger.info("Deleting author with ID {}", authorId);
 		return doDelete(ApiConfig.getAuthorsEndpoint(), authorId);
 	}
@@ -76,7 +76,7 @@ public class AuthorService extends BookstoreApiClient {
 	 * @param authorId The author ID to check
 	 * @return true if author exists, false otherwise
 	 */
-	public boolean authorExists(int authorId) {
+	public boolean authorExists(String authorId) {
 		try {
 			Response response = doGet(ApiConfig.getAuthorsEndpoint(), authorId);
 			return response.getStatusCode() == 200;

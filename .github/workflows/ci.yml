@@ -30,9 +30,6 @@ jobs:
         distribution: 'temurin'
         cache: 'maven'
     
-    - name: Install dependencies
-      run: mvn clean install -DskipTests
-    
     - name: Run API tests and generate reports
       run: mvn clean verify
 

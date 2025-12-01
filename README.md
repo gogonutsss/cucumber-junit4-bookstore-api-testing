@@ -17,7 +17,9 @@
 git clone https://github.com/gogonutsss/cucumber-junit4-bookstore-api-testing
 cd cucumber-junit4-bookstore-api-testing
 
-# Install dependencies (skip tests for faster setup)
+# Install dependencies, skip tests, for faster setup. This error is expected in this case: 
+    # INFO: Unexpected error
+    # net.masterthought.cucumber.ValidationException: None report file was added
 mvn clean install -DskipTests
 
 # Verify setup (run smoke tests)

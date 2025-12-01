@@ -35,7 +35,6 @@ jobs:
     
     - name: Run API tests and generate reports
       run: mvn clean verify
-      continue-on-error: true
 
     - name: Upload Native Cucumber HTML Report
       if: always()

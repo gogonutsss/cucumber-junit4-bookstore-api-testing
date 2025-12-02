@@ -88,24 +88,24 @@ jobs:
       continue-on-error: true
 
     - name: Setup Pages
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+      if: always() && github.ref == 'refs/heads/main' && github.event_name == 'push'
       id: setup-pages
       uses: actions/configure-pages@v4
       continue-on-error: true  
   
     - name: Upload Masterthought Cucumber HTML Report to Pages
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push' && steps.setup-pages.outcome == 'success'
+      if: always() && github.ref == 'refs/heads/main' && github.event_name == 'push' && steps.setup-pages.outcome == 'success'
       id: upload-pages
       uses: actions/upload-pages-artifact@v4
       with:
         path: target/cucumber-html-reports/
     
     - name: Deploy Masterthought Cucumber HTML Report to Pages
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push' && steps.upload-pages.outcome == 'success'
+      if: always() && github.ref == 'refs/heads/main' && github.event_name == 'push' && steps.upload-pages.outcome == 'success'
       uses: actions/deploy-pages@v4
       
     - name: Display Published Page URL
-      if: github.ref == 'refs/heads/main' && github.event_name == 'push' && steps.upload-pages.outcome == 'success'
+      if: always() && github.ref == 'refs/heads/main' && github.event_name == 'push' && steps.upload-pages.outcome == 'success'
       run: |
         echo "📄 Enjoy this pretty Cucumber HTML Report: https://gogonutsss.github.io/cucumber-junit4-bookstore-api-testing/overview-features.html"
 
